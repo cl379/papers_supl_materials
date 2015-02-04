@@ -1,0 +1,17 @@
+site	grass_leaf_stem	inflorescence	woody	undetermined	context
+Harappa	0.69	1.00	1.00	1.00	floor
+Harappa	0.00	0.31	0.19	0.75	ash
+Harappa	0.13	0.69	0.81	0.94	fireplace
+Harappa	0.06	0.00	0.00	0.69	street
+Kanmer	0.31	0.75	0.50	0.38	ash
+Kanmer	0.50	0.06	0.38	0.00	floor
+Kanmer	0.56	0.13	0.31	0.31	plaster
+Kanmer	0.38	0.88	0.88	0.44	fireplace
+Shikarpur	0.81	0.56	0.06	0.63	pit
+Shikarpur	0.19	0.31	0.25	0.00	plaster
+Shikarpur	0.44	0.19	0.75	0.44	ash
+Shikarpur	0.94	0.63	0.94	0.25	fireplace
+Shikarpur	0.25	0.75	0.13	0.56	floor
+Alamgirpur	0.75	0.44	0.50	0.19	floor
+Alamgirpur	1.00	0.94	0.69	0.00	ash
+Alamgirpur	0.88	0.50	0.44	0.81	pit

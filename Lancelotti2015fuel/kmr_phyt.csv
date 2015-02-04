@@ -1,0 +1,17 @@
+context	grass_leaf_stem	inflorescence	woody_species	undetermined
+ash	0.27	0.53	0.07	0.00
+ash	0.00	0.40	0.27	0.67
+ash	1.00	0.87	0.40	0.87
+ash	0.53	0.53	0.80	0.00
+floor	0.80	0.20	0.53	0.00
+floor	0.40	0.00	0.33	0.00
+plaster	0.47	0.07	0.07	0.00
+plaster	0.60	0.20	0.20	0.67
+fireplace	0.33	0.13	0.60	0.87
+fireplace	0.07	0.20	0.00	0.00
+fireplace	0.73	0.73	0.73	0.00
+fireplace	0.60	0.80	0.47	0.00
+fireplace	0.13	0.93	0.93	1.00
+fireplace	0.20	1.00	1.00	0.00
+fireplace	0.93	0.53	0.87	0.00
+fireplace	0.87	0.47	0.67	0.67

@@ -1,0 +1,16 @@
+context	Dry_thorn_scrubland	hygrophile	mangrove	Non-wood	undetermined
+pit	0.00	0.86	0.00	0.00	0.00
+pit	0.86	0.00	0.00	0.93	0.21
+fireplace	0.71	0.64	0.00	0.00	0.21
+fireplace	0.57	1.00	0.00	0.00	1.00
+fireplace	0.43	0.00	0.00	0.00	0.71
+fireplace	0.14	0.93	0.00	0.00	0.64
+fireplace	1.00	0.00	0.00	0.00	0.50
+floor	0.93	0.71	0.00	0.00	0.79
+floor	0.64	0.00	0.00	0.00	0.21
+floor	0.21	0.00	1.00	0.00	0.00
+occupation	0.36	0.79	0.00	1.00	0.43
+occupation	0.29	0.00	0.00	0.00	0.00
+occupation	0.00	0.00	0.00	0.00	0.93
+occupation	0.79	0.00	0.00	0.00	0.86
+occupation	0.50	0.00	0.00	0.00	0.50

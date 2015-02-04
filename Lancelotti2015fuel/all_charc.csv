@@ -1,0 +1,15 @@
+site	Dry_thorn_scrubland	hygrophile	anthropogenic	mountain_forest	mangrove	Non-wood	undetermined	context
+Harappa	0.23	0.92	0.77	0.92	0.00	0.00	0.08	fireplace
+Harappa	0.62	0.77	0.92	0.85	0.00	0.00	0.54	pit
+Harappa	0.69	1.00	0.85	1.00	0.00	0.00	0.38	floor
+Kanmer	0.77	0.38	0.69	0.00	0.85	0.85	0.85	fireplace
+Kanmer	0.92	0.46	0.00	0.00	0.77	0.69	0.92	ash
+Kanmer	0.85	0.85	0.92	0.00	0.00	0.00	0.62	floor
+Kanmer	0.92	0.62	0.62	0.00	0.92	0.46	1.00	occupation
+Shikarpur	0.38	0.54	0.00	0.00	0.00	0.62	0.31	pit
+Shikarpur	0.54	0.69	0.00	0.00	0.00	0.00	0.77	fireplace
+Shikarpur	0.46	0.31	0.00	0.00	1.00	0.00	0.46	floor
+Shikarpur	0.31	0.23	0.00	0.00	0.00	0.54	0.69	occupation
+Alamgirpur	0.00	0.00	0.00	0.00	0.00	1.00	0.23	floor
+Alamgirpur	0.08	0.00	0.54	0.00	0.00	0.92	0.15	pit
+Alamgirpur	0.15	0.00	0.00	0.00	0.00	0.77	0.00	ash
