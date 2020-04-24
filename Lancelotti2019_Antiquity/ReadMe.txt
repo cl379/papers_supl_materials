@@ -1,12 +1,28 @@
-﻿Raw data for: 
+﻿Raw data, transformed data and R script used in: 
 
-Lancelotti, C., Biagetti, S., Zerboni, A., Usai, D., Madella, M. 2019. The archaeology and ethnoarchaeology of rain-fed cultivation in arid and hyper-arid North Africa. Antiquity, 93(370): 1026-1039.
-
-DOI: https://doi.org/10.15184/aqy.2019.109
-
-In this repository you will find one file:
-
-1. Phytoliths_raw_data.ods> contains the extraction and id raw data for the phytolith analysis presented in the paper.
+Lancelotti, C. 2018. Not all that burns is wood. Antiquity, 93(370): 1026-1039.
 
 
-This research is part of the RAINDROPS project (ERC-Stg2017 G.A. 759800). 
+
+In this repository you will find:
+
+1. Stats folder> contains the R script used for performing PCA and CA, together with the transformed datasets used in statistical analyses.
+
+2. All the raw-data on which the analyses are based:
+	a. Alamgirpur_charcoal.csv > absolute and relative counts of the charcoal fragments identified at the site of Alamgirpur.
+
+	b. Harappa_charcoal.csv >  absolute and relative counts of the charcoal fragments identified at the site of Harappa.
+
+	c. ICP-MS_all-sites.ods >  geochemistry data from all archaeological sites and from the dung reference collection.
+	
+	d. Kanmer_charcoal.csv >  absolute and relative counts of the charcoal fragments identified at the site of Kanmer.
+	
+	e. Phytoliths_all-sites.ods > phytolith data, including extraction weighting and ID from all archaeological sites and from the dung reference collection.
+	
+	f. Shikarpur_charcoal.csv >  absolute and relative counts of the charcoal fragments identified at the site of Shikarpur.
+	
+	g. Spherulites_all-sites.csv > spherulites presence/absence evaluation and semi-quantification.
+	
+
+
+This research was part of my PhD, carried out at the Mc Donald Institute for Archaeology, University of Cambridge and St. John’s College. My research was funded by AHRC, Newton Trust (Former Cambridge European Trust), St John’s College, Isbel-Fletcher funds and Smuts funds.
