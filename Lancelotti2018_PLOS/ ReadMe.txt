@@ -1,6 +1,8 @@
-﻿Raw data, transformed data and R script used in: 
+Raw data, transformed data and R script used in: 
 
-Lancelotti, C. 2018. Not all that burns is wood. Antiquity, 93(370): 1026-1039.
+Lancelotti, C. 2018. Not all that burns is wood. A social perspective on fuel exploitation and use during the Indus urban period (2600-1900 BC). PLoS One. 2018; 13(3): e0192364.
+
+doi: 10.1371/journal.pone.0192364
 
 
 
