@@ -1,0 +1,298 @@
+﻿Supplementary materials 4: R code.
+
+#Extracting spatial data:
+
+library(sp)
+library(rgdal)
+library(raster)
+library(readxl)
+library(maptools)
+library(textshape)
+library(spatialEco)
+library(spatial.tools)
+
+# Data loading
+setwd() 
+list <- list.files(path = "D:/", pattern = ".tif$", all.files = TRUE, full.names = TRUE) # Import rasters
+r0 <- raster("D:/") # Load reference raster
+ext <- as(extent(-20, 150, -35, 60), "SpatialPolygons") # Select reference extent for study area
+crs(ext) <- crs(r0) # Establish CRS for reference extent
+r0_ext <- crop(r0, ext) # Crop reference raster to match extent
+
+# Raster homogenization:
+rlist_h <- list() 
+for (i in 1:length(rlist)) { 
+  print(rlist[[i]])
+  ri <- raster(rlist[[i]])
+  crs(ri) <- crs(r0)
+  if (any(res(ri)) != any(res(r0))) {
+ri_r <- resample(ri, r0, "bilinear") # Resample to the same grid
+ri_c <- crop(ri_r, ext) # Set raster extents to match by cropping them w/ new spatial object (ext)
+ri_m <- mask(ri_c, r0_ext) # Remove data which falls outside one of the rasters (e.g. oceans)
+rlist_h[[i]] <- ri_m
+  }
+  else {
+ri_c <- crop(ri, ext) # Set raster extents to match by cropping them w/ new spatial object (ext)
+ri_m <- mask(ri_c, r0_ext) # Remove data which falls outside one of the rasters (e.g. oceans)
+rlist_h[[i]] <- ri_m
+  }
+} 
+
+# Extract by XY coordinates
+data <- read_excel("D:/")
+a <- column_to_rownames (data, loc=1)
+xy <- data.frame(a[1:2]) # Load XY coordinates
+coordinates(xy) <- cbind(xy$LONG, xy$LATI) # Convert into spatial points
+crs(xy) <- crs(r0) # Set CRS (units of "buffer" in extract depends on chosen CRS)
+
+b <- data.frame()
+b <- column_to_rownames (data.frame(rownames(a)), loc=1)
+for (i in 1:length(rlist_h)) {
+  print(i)
+  print(rlist_h[[i]])
+  ri <- rlist_h[[i]]
+  e1 <- extract(ri, xy, buffer = 50000, fun = mean, na.rm = TRUE)
+  e2 <- extract(ri, xy, buffer = 50000, fun = var, na.rm = TRUE)
+  b <- cbind(b, (as.data.frame(cbind(e1, e2), row.names = rownames(xy))))
+  colnames(b)[names(b) == c("e1", "e2")] <- c(paste((names(rlist_h[[i]])), "_m", sep = ""),
+                                           paste((names(rlist_h[[i]])), "_v", sep = ""))
+}
+print(b)
+
+# Extract successive rasters by all polygons:
+data <- read_excel("D:/") # Load data frame w/ cultures as cases
+a <- column_to_rownames (data, loc=1) # Set cultures names as rows
+shp <- readOGR("D:/") # Load .shp file
+crs(shp) <- crs(r0) # Establish CRS for polygons
+
+c2 <- data.frame
+c2 <- column_to_rownames (data.frame(rownames(a)), loc=1)
+for (i in 1:length(rlist_h)) {
+  print(rlist_h[[i]])
+  ri <- rlist_h[[i]]
+  b2 <- data.frame()
+  for (j in 1:nrow(shp)) {
+print(j)
+pi <- remove.holes(shp[j,])
+e3 <- extract(ri, pi, fun = mean, na.rm = TRUE)
+e4 <- extract(ri, pi, fun = var, na.rm = TRUE)
+b2 <- rbind(b2, as.data.frame(cbind(e3, e4)))
+  }
+  colnames(b2)[names(b2) == c("V1", "V2")] <- c(paste((names(rlist_h[[i]])), "_m", sep = ""),
+                                           paste((names(rlist_h[[i]])), "_v", sep = ""))
+  c2 <- cbind(c2, b2)
+}
+print(c2)
+
+# RDA models
+
+library(readxl)
+library(textshape)
+library(permute)
+library(lattice)
+library(vegan)
+library(rgeos)
+library(rgdal)
+library(adespatial)
+
+# Set working directory and load data
+setwd ("D:/")
+CROPS <- read_excel("")
+cro <- column_to_rownames (CROPS, loc=1) # Adjust columns, hence creating data frames.
+
+# Create data frames for output (dep) and explanatory (ind) variables, and convert outcome variables into linear data (hel) using Hellinger transformation
+cro_dep <- data.frame(cro[1:3])
+cro_hel <- decostand(cro_dep, method = "hellinger")
+cro_ind <- data.frame(cro[6:ncol(cro)])
+
+# Create subsets of independent variables
+cro_xy <- data.frame(cro[4:5])
+cro_cli <- data.frame(cro[6:55])
+cro_soi <- data.frame(cro[56:ncol(cro)])
+
+# Global RDAs
+cro_ind_rda <- rda(cro_hel ~ ., cro_ind)
+cro_ind_rda
+cro_ind_R2adj <- RsquareAdj(cro_ind_rda)$adj.r.squared #Adjusted R2
+cro_ind_R2adj
+anova.cca(cro_ind_rda, step = 1000) #Test independent variables. If significant, draw triplots.
+anova.cca(cro_ind_rda, step = 1000, by = "axis")
+
+# Forward Selection by independent variables and triplots
+
+cro_ind_rda <- rda(cro_hel ~., cro_ind)
+cro_ind_rda0 <- rda(cro_hel ~ 1, cro_ind)
+cro_ind_m <- ordiR2step(cro_ind_rda0, cro_ind_rda, R2scope = TRUE, permutations = how(nperm = 1000))
+cro_ind_m
+cro_ind_m_R2adj <- RsquareAdj(cro_ind_m)$adj.r.squared #Adjusted R2
+cro_ind_m_R2adj
+anova.cca(cro_ind_m, step = 1000) #Test selected variables. If significant, draw triplots.
+anova.cca(cro_ind_m, step = 1000, by = "terms") #Test RDA axes. Draw triplots using the significant ones.
+vif.cca(cro_ind_m)
+cro_sig <- anova.cca(cro_ind_m, step = 1000, by = "axis") #Test RDA axes. Draw triplots using the significant ones.
+cro_sig
+cro_ax <- length(which(cro_sig[, ncol(cro_sig)] <= 0.05))
+cro_coef <- coef(cro_ind_m, choices = 1:cro_ax, scaling = 1) # Check for explanatory variables impact on each RDA
+cro_spsco <- scores(cro_ind_m, choices = 1:cro_ax, scaling = 1, display = "sp") # Check for each response variable ordination by RDA.
+cro_wasco <- scores(cro_ind_m, choices = 1:cro_ax, scaling = 1, display = "wa") # Check for each row ordination by RDA.
+
+# dbMEM analysis
+
+cro_shp <- readOGR() #Load .ship file
+cro_dist <- as.dist(gDistance(cro_shp, byid = TRUE)) # Calculate minimum distance between polygons
+cro_thr <- give.thresh(cro_dist) # Create selection threshold for dbMEM creation
+cro_mem <- as.data.frame(dbmem(cro_dist, thresh = cro_thr)) # dbMEM creation
+
+cro_xy_rda <- rda(cro_hel ~ ., cro_xy)
+cro_xy_rda
+anova.cca(cro_xy_rda, step = 1000) # Check for linear trends and, if present, detrend data.
+cro_xy_R2adj <- RsquareAdj(cro_xy_rda)$adj.r.squared #Adjusted R2
+cro_xy_R2adj
+cro_det <- resid(lm(as.matrix(cro_hel) ~ ., data = cro_xy)) # Detrend data.
+
+cro_mem_rda <- rda(cro_det ~ ., cro_mem) # Global dbMEM analysis on detrended data
+cro_mem_rda
+anova.cca(cro_mem_rda, step = 1000) # Check for statistical significance, if so, compute adj-R2 and forward selection
+cro_mem_R2adj <- RsquareAdj(cro_mem_rda)$adj.r.squared #Adjusted R2
+cro_mem_R2adj
+
+cro_mem_R2adj <- RsquareAdj(cro_mem_rda)$adj.r.squared
+cro_mem_fs <- forward.sel(cro_det, as.matrix(cro_mem), adjR2thresh = cro_mem_R2adj)
+cro_mem_sign <- nrow(cro_ind_m)
+cro_mem_sort <- sort(cro_mem_m[,2]) # Sort significant dbMEM by increasing order
+cro_mem_red <- cro_mem[,c(cro_mem_sort)] # Write significant dbMEM in new object
+cro_mem_m <- rda(cro_det ~ ., cro_mem_red) # New dbMEM analysis with significant variables
+cro_mem_m_R2adj <- squareAdj(cro_mem_m)$adj.r.squared
+anova.cca(cro_mem_m, step = 1000) # Check for statistical significance and, if so, plot significant axis.
+cro_axes <- anova.cca(cro_mem_m, step = 1000, by = "axis") # Check for axis statistical significance.
+cro_axes_nb <- length(which(cro_axes[, ncol(cro_axes)] <= 0.05)) # Set number of meaningfull axes.
+cro_mem_axes <- scores(cro_mem_m, choices = c(1:cro_axes_nb), display = "lc", scaling = 1) # Calculate axis scores.
+par(mfrow = c(1, cro_axes_nb))
+for (i in 1:cro_mem_axes){ # Plot significant axes
+  sr.value(cro_xy, cro_mem_axes[,i],
+        sub = paste("RDA",i), csub = 2)
+}
+
+# Variation partitioning w/ spatial components
+
+cro_ind_m
+anova.cca(cro_ind_m, step = 1000)
+anova.cca(cro_ind_m, step = 1000, by = "axis")
+anova.cca(cro_ind_m, step = 1000, by = "terms")
+cro_xy_rda0 <- rda(cro_hel ~ 1, cro_xy)
+cro_xy_rda <- rda(cro_hel ~ ., cro_xy)
+cro_xy_m <- ordiR2step(cro_xy_rda0, cro_xy_rda)
+anova(cro_xy_rda)
+cro_varp <- varpart(cro_hel,
+                 ~ cro_ind$BIO10_v + cro_ind$GHI_m + cro_ind$BIO15_m,
+                 ~ cro_ind$WC11_m + cro_ind$PH1_m + cro_ind$CLAY2_v,
+                 cro_xy)
+cro_varp
+cro_cli_p <- as.matrix(cro_ind[, c("BIO10_v", "GHI_m", "BIO15_m")])
+anova.cca(rda(cro_hel, cro_cli_p), step = 1000)
+cro_soi_p <- as.matrix(cro_ind[, c("WC11_m", "PH1_m", "CLAY2_v")])
+anova.cca(rda(cro_hel, cro_soi_p), step = 1000)
+anova.cca(rda(cro_hel, cro_xy), step = 1000)
+
+anova.cca(rda(cro_hel, cbind(cro_cli_p, cro_soi_p)), step = 1000)
+anova.cca(rda(cro_hel, cbind(cro_cli_p, cro_xy)), step = 1000)
+anova.cca(rda(cro_hel, cbind(cro_soi_p, cro_xy)), step = 1000)
+anova.cca(rda(cro_hel, cbind(cro_cli_p, cro_soi_p, cro_xy)), step = 1000)
+
+anova.cca(rda(cro_hel, cro_cli_p, cbind(cro_soi_p, cro_xy)), step = 1000)
+anova.cca(rda(cro_hel, cro_soi_p, cbind(cro_cli_p, cro_xy)), step = 1000)
+anova.cca(rda(cro_hel, cro_xy, cbind(cro_cli_p, cro_soi_p)), step = 1000)
+
+
+
+
+#Models Evaluation
+
+library(readxl)
+library(textshape)
+library(ROCR)
+library(vegan)
+library(PresenceAbsence)
+
+ # Set working directory and load data
+setwd ("D:/R_PhD")
+C_CROPS <- read_excel("D:/")
+E_CROPS <- read_excel("D:/")
+# Adjust columns, hence creating data frames.
+c_crops <- column_to_rownames(C_CROPS, loc=1) 
+e_crops <- column_to_rownames(E_CROPS, loc=1)
+# Separate test datasets
+c_cro_ind <- data.frame(c_crops[4:ncol(c_crops)]) 
+c_cro <- data.frame(c_crops[1:3])
+e_cro_ind <- data.frame(e_crops[4:ncol(e_crops)])
+e_cro <- data.frame(e_crops[1:3])
+
+# Model fitting assessment by Performance Measures.
+
+cro_ind_m
+cro_pred <- fitted(cro_ind_m, type = "response")
+cro_thres <- data.frame((matrix(nrow = 1, ncol=0)))
+for(i in 1:ncol(cro_pred)) {
+  thres_data <- data.frame(cbind(seq(1:(nrow(cro_dep))), cro_dep[,i], cro_pred[,i]))
+  t <- optimal.thresholds(thres_data, threshold = 101, opt.methods = "MaxSens+Spec")
+  colnames(t)[names(t) == "X3"] <- colnames(cro_dep[i])
+  cro_thres <- cbind(cro_thres, t[2])
+}
+cro_ind_p <- as.data.frame(cro_pred)
+for (i in 1:ncol(cro_ind_p)) {
+  cro_ind_p[i] <- ifelse(cro_ind_p[i] < cro_thres[,i], 0, 1)
+}
+cf <- table(factor(as.matrix(cro_dep)), factor(as.matrix(cro_ind_p))) # Confusion matrix
+TP <- cf[2,2] # True positives.
+TN <- cf[1,1] # True negatives.
+FP <- cf[1,2] # False positives.
+FN <- cf[2,1] # False negatives.
+acc <- (TP+TN)/(TP+FP+FN+TN) # Accuracy = (TP+TN)/(TP+FP+FN+TN)
+prec <- TP/(TP+FP) # Precision = TP/(TP+FP)
+rec <- TP/(TP+FN) # Recall = TP/(TP+FN)
+F1_score <- 2*((rec*prec)/(rec+prec)) # F1 Score = 2*((Recall*Precision)/(Recall+Precision))
+r <- cbind(acc, prec, rec, F1_score)
+colnames(r) <- c("Acc.(All)", "Prec.(TP Rate)", "Rec.(% all TP)", "F1 (Class. Strength)")  
+cro_fitrep <- r
+print(cro_fitrep)
+
+# Model prediction assessment by Performance Measures.
+
+cro_ind_m
+cro_pred <- fitted(cro_ind_m, type = "response")
+cro_thres <- data.frame((matrix(nrow = 1, ncol=0)))
+for(i in 1:ncol(cro_pred)) {
+  thres_data <- data.frame(cbind(seq(1:(nrow(cro_dep))), cro_dep[,i], cro_pred[,i]))
+  t <- optimal.thresholds(thres_data, threshold = 101, opt.methods = "MaxSens+Spec")
+  colnames(t)[names(t) == "X3"] <- colnames(cro_dep[i])
+  cro_thres <- cbind(cro_thres, t[2])
+}
+cro_c_p <- as.data.frame(predict(cro_ind_m, c_cro_ind, type = "response"))
+cro_e_p <- as.data.frame(predict(cro_ind_m, e_cro_ind, type = "response"))
+for (i in 1:ncol(cro_c_p)) {
+  cro_c_p[i] <- ifelse(cro_c_p[i] < cro_thres[,i], 0, 1)
+  cro_e_p[i] <- ifelse(cro_e_p[i] < cro_thres[,i], 0, 1)
+}
+print(cro_c_p)
+
+lcro_pred <- list(cro_c_p, cro_e_p)
+lcro_real <- list(c_cro, e_cro)
+cro_report <- data.frame()
+for (i in 1:length(lcro_pred)) {
+  cf <- table(factor(as.matrix(lcro_real[[i]])), factor(as.matrix(lcro_pred[[i]]))) # Confusion matrix
+  TP <- cf[2,2] # True positives.
+  TN <- cf[1,1] # True negatives.
+  FP <- cf[1,2] # False positives.
+  FN <- cf[2,1] # False negatives.
+  acc <- (TP+TN)/(TP+FP+FN+TN) # Accuracy = (TP+TN)/(TP+FP+FN+TN)
+  prec <- TP/(TP+FP) # Precision = TP/(TP+FP)
+  rec <- TP/(TP+FN) # Recall = TP/(TP+FN)
+  F1_score <- 2*((rec*prec)/(rec+prec)) # F1 Score = 2*((Recall*Precision)/(Recall+Precision))
+  r <- cbind(acc, prec, rec, F1_score)
+  colnames(r) <- c("Acc.(All)", "Prec.(TP Rate)", "Rec.(% all TP)", "F1 (Class. Strength)")              
+  cro_report <- rbind(cro_report, r)
+}
+rownames(cro_report) <- c("cro_c", "cro_e")
+print(cro_report)
+
+

@@ -1,0 +1,23 @@
+"Table: Summary of VP analysis results (GC = Growing Cycles PC = Physio-Climatic,  ED = Edaphological, XY = Geographical location).",,,,,,,,
+,,,,,,,,
+,Crop selection,,FM cultivation,,PM cultivation,,SB cultivation,
+,adj-R²,p-value,adj-R²,p-value,adj-R²,p-value,adj-R²,p-value
+GC,N/A,N/A,N/A,N/A,0.079,0.047,0.084,0.006
+PC,0.193,0.001,0.229,0.003,0.328,0.002,N/A,N/A
+ED,0.395,0.001,0.461,0.001,0.273,0.015,0.16,0.002
+XY,0.178,0.001,N/A,N/A,0.258,0.003,N/A,N/A
+GC+PC,N/A,N/A,N/A,N/A,0.298,0.006,N/A,N/A
+GC+ED,N/A,N/A,N/A,N/A,0.298,0.013,0.24,0.001
+GC+XY,N/A,N/A,N/A,N/A,0.312,0.003,N/A,N/A
+PC+ED,0.587,0.001,0.749,0.001,0.76,0.001,N/A,N/A
+PC+XY,0.36,0.001,N/A,N/A,0.377,0.001,N/A,N/A
+ED+XY,0.44,0.001,N/A,N/A,0.613,0.001,N/A,N/A
+GC+PC+ED,N/A,N/A,N/A,N/A,0.878,0.001,N/A,N/A
+GC+PC+XY,N/A,N/A,N/A,N/A,0.354,0.005,N/A,N/A
+GC+ED+XY,N/A,N/A,N/A,N/A,0.649,0.001,N/A,N/A
+PC+ED+XY,0.603,0.001,N/A,N/A,0.744,0.001,N/A,N/A
+GC+PC+ED+XY,0.603,0.001,N/A,N/A,0.877,0.001,N/A,N/A
+GC | PC+ED+XY,N/A,N/A,N/A,N/A,0.133,0.001,0.08,0.003
+PC | GC+ED+XY,0.156,0.001,0.248,0.001,0.228,0.001,N/A,N/A
+ED | GC+PC+XY,0.241,0.001,0.48,0.001,0.523,0.001,0.16,0.001
+XY | GC+PC+ED,0.004,0.258,N/A,N/A,-0.001,0.492,N/A,N/A
