@@ -46,7 +46,7 @@ fitGV <- function(semvar, model) {
         }
         WSS[it+1] <- sum(w * (yvect - (values %*% t(sills)))^2)
         # stop criterion (10e-4)
-        if(it > 1 & abs(WSS[it] - WSS[it+1]) < 10^-4) break 
+        if(it > 1 & abs(WSS[it] - WSS[it+1]) < 10^-6) break 
     }
     # arrange the model
     for (i in 1:length(model)) model[[i]]$psill <- sills[i,] 
