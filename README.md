@@ -1,4 +1,4 @@
-## Supplementary materials and raw data for published papers ##
+## Suplementary materials and raw data for published papers ##
 
 In this repository you can find folders with suplementary materials, raw data and R codes (if it applies), for various published papers. Each paper is defined by the first author surname, the year of paper submission (please be aware that this can be different from the final publication's year) and a descriptive (normally the Journal abreviation).
 
