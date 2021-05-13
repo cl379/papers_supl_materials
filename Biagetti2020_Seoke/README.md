@@ -1,9 +1,7 @@
-Stefano Biagetti, Jonas Alcaina-Mateos, Abel Ruiz-Giralt, Carla Lancelotti, Patricia Groenwald, Jordi Iba\'f1ez, Shira Gur-Arieh, Fred Morton, Stefania Merlo.\
-Using pXRF on anthropogenic sediments to map geo-chemical signatures at Seoke (Botswana): a way to expand the archaeological record in southern African Stone Walled Sites?\'a0\
+Biagetti S, Alcaina-Mateos J, Ruiz-Giralt A, Lancelotti C, Groenewald P, Ibañez-Insa J, et al. (2021) Identifying anthropogenic features at Seoke (Botswana) using pXRF: Expanding the record of southern African Stone Walled Sites. PLoS ONE 16(5): e0250776. https://doi.org/10.1371/journal.pone.0250776
 
-The paper, submitted on November 28th,  is under revision in PLOS ONE.
 
-Jonas Alcaina-Mateos is the author of the R codes
+Jonas Alcaina-Mateos is the author of the R codes.
 
 
 ## License:
