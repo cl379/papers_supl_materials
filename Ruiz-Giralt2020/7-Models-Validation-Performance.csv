@@ -1,7 +1,7 @@
 Table: Summary of model fitting performance measures,,,,
 ,,,,
 ,Accuracy,Precision,Recall,F1-score
-Crop selection,0.866,0.88,0.857,0.869
+Crop selection,0.866,0.881,0.857,0.869
 FM cultivation,0.95,0.95,0.95,0.95
 PM cultivation,1,1,1,1
 SB cultivation,0.782,0.627,0.855,0.723
@@ -10,16 +10,16 @@ SB cultivation,0.782,0.627,0.855,0.723
 Table: Summary of model prediction performance measures by test individuals,,,,
 ,,,,
 ,Accuracy,Precision,Recall,F1-score
-Crop selection,0.636,0.658,0.602,0.629
-FM cultivation,0.76,0.76,0.76,0.76
-PM cultivation,0.692,0.692,0.692,0.692
-SB cultivation,0.752,0.6,0.767,0.673
+Crop selection,0.553,0.568,0.602,0.584
+FM cultivation,0.58,0.58,0.58,0.58
+PM cultivation,0.576,0.576,0.576,0.576
+SB cultivation,0.837,0.755,0.755,0.755
 ,,,,
 ,,,,
 Table: Summary of model prediction performance measures by test cultures,,,,
 ,,,,
 ,Accuracy,Precision,Recall,F1-score
-Crop selection,0.778,1,0.667,0.8
-FM cultivation,1,1,1,1
-PM cultivation,0.5,0.5,0.5,0.5
-SB cultivation,0.833,0.714,0.833,0.769
+Crop selection,0.666,0.8,0.667,0.727
+FM cultivation,0.5,0.5,0.5,0.5
+PM cultivation,0.625,0.75,0.6,0.667
+SB cultivation,0.833,1,0.57,0.727
